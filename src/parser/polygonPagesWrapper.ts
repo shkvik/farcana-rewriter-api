@@ -1,7 +1,17 @@
 import https from 'https';
 import { Parser } from 'htmlparser2';
 import { Console } from 'console';
+import * as WebSocket from 'ws';
 
+export enum step {
+    LinkParsing,
+    ContentParsing,
+}
+
+export interface ProcessMessage {
+    step:  step;
+    count: number;
+}
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
@@ -62,7 +72,7 @@ export async function getLinkByClass(targetClass: string, htmlStr: string): Prom
 }
 
 
-export async function getPolygonLinks(): Promise<string[]> {
+export async function getPolygonLinks(callBack: (msg: string) => void): Promise<string[]> {
 
     let articalLinks: string[] = new Array<string>();
     var targetClass: string = 'c-entry-box--compact__image-wrapper';
@@ -85,7 +95,7 @@ export async function getPolygonLinks(): Promise<string[]> {
     
 
 
-    var dbgCount: number = 3
+    var dbgCount: number = 1
 
     for(let i: number = 0; i < dbgCount; i++) {
 
@@ -98,10 +108,19 @@ export async function getPolygonLinks(): Promise<string[]> {
 
         process.stdout.write('\x1B[1F\x1B[2K');
         console.log(thisProgressBar.update(progressCounter));
-    }
-    process.stdout.write('\x1B[1F\x1B[2K');
 
+
+        var msg: ProcessMessage = 
+        {
+            step: step.LinkParsing,
+            count: progressCounter
+        }
+        callBack(JSON.stringify(msg));
+    }
+
+    process.stdout.write('\x1B[1F\x1B[2K');
     console.log(thisProgressBar.update(1));
+
     return articalLinks;
 }
 
