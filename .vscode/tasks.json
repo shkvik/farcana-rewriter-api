@@ -1,0 +1,11 @@
+{
+    "tasks": [
+        {
+            "label": "My Custom Task",
+            "type": "shell",
+            "command": "cmd",
+            "args": ["/c", "npm run build"],
+            "problemMatcher": []
+        }
+    ]
+}
