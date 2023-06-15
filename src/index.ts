@@ -16,8 +16,10 @@ const serverOptions: https.ServerOptions = {
 const app: Express = express();
 
 
-app.use(function(req, res, next) {
+app.use(function(req, res, next) { 
+    //res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.header('Access-Control-Allow-Origin', 'https://shkrift.com:9000');
+
     next();
 });
 
